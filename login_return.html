@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+</head>
+
+<body>
+<span id="access_token"></span> 
+</body>
+
+<script>
+	var accessToken = '';
+	var idAccess_token = document.getElementById('access_token');
+	idAccess_token.innerHTML = '';
+
+	// 입력값
+	var qry = window.location.hash;
+	var arr = qry.split("&");
+	for ( var i=0;i<arr.length;i++ ){
+		var arrTmp = arr[i].split("=");
+	    idAccess_token.innerHTML += arrTmp[0]+' = '+arrTmp[1]+'<br>';
+
+		if ( arrTmp[0] == '#access_token'  ) accessToken    = arrTmp[1];
+	}
+
+    
+    
+   //https://graph.facebook.com/me/feed?access_token=AAAFnyXeqo4MBAKpKoKiIsJdpwvZB5XEUwvtemm5XoFQWWU5K7utwtvzju7fjqTsiG9diSZBnGp6iR49jkuPwAl4x7Qi3tAnPFDxwRfkduTAHVJc17S
+   var path = "https://graph.facebook.com/me/feed?";
+   var queryParams = ['access_token='+accessToken];
+   var query = queryParams.join('&');
+   var url = path + query;
+   
+   idAccess_token.innerHTML += '<br>'+url;
+
+   // use jsonp to call the graph
+   var script = document.createElement('iframe');
+   script.src = url;
+   document.body.appendChild(script);   
+</script>
+</html>
