@@ -28,53 +28,13 @@ Ext.require([
 
 Ext.onReady(function () {
 	var bd = Ext.getBody(),
-		form = false,
-		rec = false,
-		selectedStoreItem = false,
+		rec = false;
 		
-		createListener = function() {
-			store1.loadData(generateData());
-		},
-		
-        createListeners = function() {
-            return {
-                // buffer so we don't refire while the user is still typing
-                buffer: 200,
-                change: function(field, newValue, oldValue, listener) {
-                    // if (rec && form) {
-                       if (newValue > field.maxValue) {
-                          field.setValue(field.maxValue);
-                       } else {
-				        store1.loadData(generateData());
-                       }
-                }
-            };
-        };
-
-	var myData = [['data']];
-	var propData = myData[0];
-		propData[1] = 10;
-		propData[2] = 10;
-		propData[3] = 10;
-		propData[4] = 10;
-		propData[5] = 10;
-		
-	var ds = Ext.create('Ext.data.ArrayStore', {
-		fields: [
-			{name: "회사명"},
-			{name: "업종"},
-			{name: "용수량", type: 'float'},
-			{name: "폐수온도", type: 'float'},
-			{name: "승온용수량", type: 'float'},
-			{name: "에너지 원료"},
-			{name: "에너지 단가", type: 'float'},
-			{name: "지역 온도"},
-			{name: "작성자"}
-		],
-		data: myData
-	});
+	// 월별 평균 온도 
 	var placeTemperature = [1, 1, 4, 11, 17, 21, 25, 26, 21, 14, 6, 1];
+	// 사용하는 재료에 따른 에너지
 	var heatEnergy = [9200, 9500, 650000, 4600, 8700];
+	// 우측상단에 들어갈 입력값 폼 
 	var propsGrid = Ext.create('Ext.grid.property.Grid', {
 		propertyNames: {
 			tested: 'QA',
@@ -92,7 +52,7 @@ Ext.onReady(function () {
 			"작성자": "홍길동"
 		}
 	});
-	
+	// 1~12월 바챠트 계산 데이터 
     window.generateData = function(n, floor){
         var data = [],
             p = (Math.random() *  11) + 1,
@@ -148,7 +108,7 @@ Ext.onReady(function () {
         }
         return data;
     };
-	
+	// 파이챠트 계산 데이터 
     window.generatePieData = function(n, floor){
 		var data = [],
             i;
@@ -172,15 +132,18 @@ Ext.onReady(function () {
         return data;
     };
 
+	// 바챠트에 쓸 데이터
     window.store1 = Ext.create('Ext.data.JsonStore', {
         fields: ['name', 'data1', 'data2'],
         data: generateData()
     });
+	// 파이챠트에 쓸 데이터
 	window.store2 = Ext.create('Ext.data.JsonStore', {
 		fields: ['name', 'data1'],
 		data: generatePieData()
 	});
 
+	// 초기화 버튼 : 모든 값을 초기값으로 바꿔줌 
 	var updateButton = Ext.create('Ext.button.Button', {
 		// renderTo: 'button-container',
 		text: '초기화',
@@ -201,6 +164,7 @@ Ext.onReady(function () {
 		}
 	});
 	
+	// 적용 버튼 : 바뀐 숫자 적용 계산해줌 
 	var applyButton = Ext.create('Ext.button.Button', {
 		text: '적용',
 		handler: function() {
@@ -209,6 +173,7 @@ Ext.onReady(function () {
 		}
 	})
 	
+	// 파이챠트 부분
 	var pieChart = Ext.create('Ext.form.Panel', {
 		width: 270,
 		height: 270,
@@ -257,6 +222,7 @@ Ext.onReady(function () {
 		}
 	})
 	
+	// 바챠트 부분
     var win = Ext.create('Ext.form.Panel', {
 		// x:350,
 		// y:100,
@@ -352,6 +318,7 @@ Ext.onReady(function () {
         }
     });
 
+// 전체 폼
 	var Form = Ext.create('Ext.form.Panel', {
 		title: '페수열회수 절감 금액 산출',
 		frame: true,
